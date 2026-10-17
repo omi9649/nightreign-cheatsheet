@@ -2,6 +2,16 @@ body {
     background-color: #0f1115;
     color: #e2e8f0;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+}
+
+.page-shell {
+    width: 100%;
+    max-width: 1860px;
+}
+
+.page-header {
+    flex-wrap: wrap;
 }
 
 /* Custom scrollbar */
@@ -41,7 +51,7 @@ body {
 
 .nl-cards {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
     grid-auto-rows: minmax(min-content, 1fr);
     gap: 8px;
     height: calc(100vh - 80px);
@@ -53,6 +63,67 @@ body {
     --sec-mt: 4px;    --pad: 6px;
 }
 .nl-cards.nl-cards-compact { height: auto; }
+.nl-finder-controls {
+    max-width: 640px;
+    margin: 16px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+.nl-finder-selects {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    gap: 12px;
+}
+.nl-finder-field {
+    width: min(100%, 440px);
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: #9ca3af;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+.nl-finder-select {
+    width: 100%;
+    min-width: 0;
+    border: 1px solid #374151;
+    border-radius: 6px;
+    background: #1e222a;
+    color: #e2e8f0;
+    padding: 8px 10px;
+    font-size: 14px;
+    letter-spacing: normal;
+    text-transform: none;
+}
+.nl-finder-select:focus {
+    outline: 2px solid #64748b;
+    outline-offset: 1px;
+}
+.nl-finder-clear {
+    background: #1e222a;
+}
+.nl-cards.nl-finder-results {
+    height: auto;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+    grid-auto-rows: auto;
+}
+.nl-finder-empty {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 20px;
+    border: 1px dashed #374151;
+    border-radius: 8px;
+    color: #9ca3af;
+    text-align: center;
+    font-size: 13px;
+}
 .nl-cards .nlc-dense {
     --por: 64px;      --cell-fs: 15.5px; --cell-pad: 1.5px;
     --enc-fs: 11px;   --enc-lh: 1.11;     --head-ico: 21px;
@@ -118,6 +189,7 @@ body {
 
 .shield-split.hidden, .shield-grid.hidden { display: none !important; }
 .shield-split { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #22262e; }
+.shield-split > div { min-width: 0; overflow-x: auto; }
 .shield-tbl { width: 100%; border-collapse: collapse; background: #1e222a; }
 .shield-tbl th { padding: 5px 8px; }
 .shield-tbl td { padding: 7px 8px; }
@@ -130,7 +202,7 @@ body {
 
 .shield-grid {
     display: grid;
-    grid-template-columns: repeat(9, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: 8px;
 }
 .shield-card {
@@ -274,7 +346,139 @@ body {
 .gh-mini-spot img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 4px var(--c)) drop-shadow(0 1px 2px #000); }
 .gh-mini-spot.found::after { content: ''; position: absolute; inset: -4px; border: 2px solid #22c55e; border-radius: 50%; }
 
-/* This sheet is a fixed 1860px-wide layout, sized for a 1920x1080
-   screen. It does not reflow at any width; a narrower window just
-   scrolls (both directions) instead of resizing the content. */
-body { overflow-x: auto; }
+@media (max-width: 640px) {
+    .page-header {
+        gap: 10px;
+    }
+
+    .page-header > .flex-1 {
+        display: none;
+    }
+
+    .page-header h1 {
+        flex: 1 1 100%;
+        font-size: 1rem;
+    }
+
+    .page-header > .flex:not(.flex-1) {
+        flex-wrap: wrap;
+    }
+
+    #nl-legend {
+        flex: 1 1 auto;
+        flex-wrap: wrap;
+        white-space: normal;
+        margin-right: 0;
+    }
+
+    #searchInput {
+        width: 100%;
+        flex: 1 1 100%;
+    }
+
+    .info-tip-box {
+        width: min(320px, calc(100vw - 24px));
+    }
+
+    .nl-cards,
+    .nl-cards.nl-cards-compact {
+        grid-template-columns: minmax(0, 1fr);
+        grid-auto-rows: auto;
+        height: auto;
+    }
+
+    .nl-finder-controls {
+        align-items: stretch;
+        margin: 12px auto;
+        padding: 12px;
+    }
+
+    .nl-finder-clear {
+        align-self: center;
+    }
+
+    .nlc {
+        min-width: 0;
+    }
+
+    .nlc-head {
+        gap: 8px;
+    }
+
+    .nlc-por {
+        width: 56px;
+        height: 56px;
+    }
+
+    .nlc-chips {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .nlc-chip {
+        padding: 2px 4px;
+        font-size: 10px;
+    }
+
+    .shield-toolbar {
+        flex-wrap: wrap;
+    }
+
+    .shield-toolbar > .flex-1 {
+        display: none;
+    }
+
+    .shield-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .shield-split {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .shield-split > div {
+        overflow-x: auto;
+    }
+
+    .shield-tbl {
+        min-width: 500px;
+    }
+
+    .shield-legend {
+        flex-wrap: wrap;
+        white-space: normal;
+        overflow: visible;
+        gap: 8px 12px;
+    }
+
+    .gh-wrap {
+        flex-direction: column;
+        height: auto;
+        min-height: 0;
+    }
+
+    .gh-main {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1 / 1;
+    }
+
+    .gh-side {
+        gap: 8px;
+    }
+
+    .gh-side > .nightlord-card:first-child {
+        flex-wrap: wrap;
+    }
+
+    .gh-cards {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: none;
+        grid-auto-rows: minmax(240px, 70vw);
+    }
+
+    .gh-side > .nightlord-card:last-child {
+        flex-wrap: wrap;
+        white-space: normal;
+    }
+}

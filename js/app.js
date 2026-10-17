@@ -1,12 +1,3 @@
-(function () {
-    const el = document.getElementById('clock');
-    const tick = () => {
-        el.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    };
-    tick();
-    setInterval(tick, 10000);
-})();
-
 const SHORT_LABELS = {
     "Standard": "STD", "Slash": "SLA", "Strike": "STR", "Pierce": "PIE",
     "Magic": "MAG", "Fire": "FIRE", "Lightning": "LGT", "Holy": "HOLY",
@@ -452,11 +443,12 @@ function setupTabs() {
                 b.classList.toggle('text-gray-500', !on);
             });
             document.getElementById('view-nightlords').classList.toggle('hidden', target !== 'nightlords');
+            document.getElementById('view-finder').classList.toggle('hidden', target !== 'finder');
             document.getElementById('view-shields').classList.toggle('hidden', target !== 'shields');
             document.getElementById('view-hollow').classList.toggle('hidden', target !== 'hollow');
             document.getElementById('nl-legend').classList.toggle('hidden', target !== 'nightlords');
             const input = document.getElementById('searchInput');
-            input.classList.toggle('invisible', target === 'hollow');
+            input.classList.toggle('hidden', target === 'finder' || target === 'hollow');
             input.placeholder = target === 'shields'
                 ? 'Search a shield or value...'
                 : 'Search a Nightlord, boss, weakness...';
@@ -630,6 +622,59 @@ function setupSearch() {
     document.getElementById('searchInput').addEventListener('input', applySearch);
 }
 
+function setupNightlordFinder() {
+    const night1Select = document.getElementById('finder-night1');
+    const night2Select = document.getElementById('finder-night2');
+    const results = document.getElementById('finder-results');
+
+    const night1Bosses = new Set();
+    const night2Bosses = new Set();
+    Object.values(scheduleData).forEach(nights => {
+        nights['Night 1'].forEach(boss => night1Bosses.add(boss));
+        nights['Night 2'].forEach(boss => night2Bosses.add(boss));
+    });
+
+    const populate = (select, bosses) => {
+        [...bosses].sort((a, b) => a.localeCompare(b)).forEach(boss => {
+            const option = document.createElement('option');
+            option.value = boss;
+            option.textContent = boss;
+            select.appendChild(option);
+        });
+    };
+    populate(night1Select, night1Bosses);
+    populate(night2Select, night2Bosses);
+
+    const renderResults = () => {
+        const night1Boss = night1Select.value;
+        const night2Boss = night2Select.value;
+        results.innerHTML = '';
+        const hasSelection = night1Boss !== '' || night2Boss !== '';
+        results.classList.toggle('hidden', !hasSelection);
+        if (!hasSelection) return;
+
+        Object.entries(scheduleData).forEach(([name, nights]) => {
+            if (night1Boss && !nights['Night 1'].includes(night1Boss)) return;
+            if (night2Boss && !nights['Night 2'].includes(night2Boss)) return;
+            results.appendChild(buildNightlordCard(name));
+        });
+        if (results.childElementCount === 0) {
+            const emptyState = document.createElement('p');
+            emptyState.className = 'nl-finder-empty';
+            emptyState.textContent = 'No Nightlords match the selected bosses.';
+            results.appendChild(emptyState);
+        }
+    };
+
+    night1Select.addEventListener('change', renderResults);
+    night2Select.addEventListener('change', renderResults);
+    document.getElementById('finder-clear').addEventListener('click', () => {
+        night1Select.value = '';
+        night2Select.value = '';
+        renderResults();
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     renderCheatSheet();
     renderShieldChart();
@@ -640,4 +685,5 @@ document.addEventListener('DOMContentLoaded', () => {
     renderHollow();
     setupTabs();
     setupSearch();
+    setupNightlordFinder();
 });
