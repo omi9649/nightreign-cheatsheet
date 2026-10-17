@@ -293,19 +293,6 @@ body {
     border-top: 1px solid rgba(148,163,184,0.08); padding-top: 4px;
 }
 
-
-/* ---- About / credits tooltip (header, top right) ---- */
-.info-tip { position: relative; flex: none; outline: none; }
-.info-tip-btn { display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%;
-                border: 1px solid #374151; color: #6b7280; font-size: 12px; font-weight: 700; cursor: help; transition: color .2s, border-color .2s; }
-.info-tip:hover .info-tip-btn, .info-tip:focus-within .info-tip-btn { color: #e5e7eb; border-color: #6b7280; }
-.info-tip-box { position: absolute; top: calc(100% + 8px); right: 0; z-index: 50; width: 320px; padding: 10px 12px;
-                background: #181a20; border: 1px solid #374151; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.6);
-                font-size: 11px; line-height: 1.5; color: #9ca3af; opacity: 0; visibility: hidden; transition: opacity .15s, visibility .15s; }
-.info-tip-box::before { content: ''; position: absolute; top: -10px; left: 0; right: 0; height: 10px; }
-.info-tip:hover .info-tip-box, .info-tip:focus-within .info-tip-box { opacity: 1; visibility: visible; }
-.info-tip-box a { color: #cbd5e1; text-decoration: underline; }
-
 /* ---- Great Hollow crystal finder ---- */
 .gh-wrap { display: flex; gap: 8px; height: calc(100vh - 80px); min-height: 640px; }
 .gh-main { height: 100%; aspect-ratio: 1 / 1; flex: none; position: relative; }
@@ -374,10 +361,6 @@ body {
     #searchInput {
         width: 100%;
         flex: 1 1 100%;
-    }
-
-    .info-tip-box {
-        width: min(320px, calc(100vw - 24px));
     }
 
     .nl-cards,
